@@ -42,6 +42,7 @@ export default {
             params: {
               limitLicense: true,
               number: 3,
+              // apiKey: process.env.spooncular_apiKey
               apiKey: 'b7b147413c244375812ccb826d79cdcc'
             }
           }

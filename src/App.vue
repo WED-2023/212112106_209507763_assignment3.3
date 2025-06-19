@@ -13,15 +13,22 @@
         <button @click="logout" class="btn btn-link p-0">Logout</button> |
       </span>
     </div>
+      <!-- <MainPage></MainPage> -->
+
     <router-view />
   </div>
 </template>
 
+ 
+
 <script>
 import { getCurrentInstance } from 'vue';
-
+// import MainPage from "./pages/MainPage.vue";
 export default {
   name: "App",
+    components: {
+      // MainPage
+    },
   setup() {
     const internalInstance = getCurrentInstance();
     const store = internalInstance.appContext.config.globalProperties.store;
@@ -37,6 +44,7 @@ export default {
     return { store, logout };
   }
 }
+
 </script>
 
 <style lang="scss">

@@ -25,9 +25,13 @@
 <script>
 import { getCurrentInstance } from 'vue';
 import RecipePreviewList from "../components/RecipePreviewList.vue";
+// import RandomRecipes from "../components/RandomRecipes.vue";
+
 
 export default {
+  name: "MainPage",
   components: {
+    // RandomRecipes,
     RecipePreviewList
   },
   setup() {
