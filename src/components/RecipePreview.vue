@@ -36,7 +36,6 @@ export default {
 
 <template>
   <div class="card h-100 recipe-card">
-    <!-- Image area with overlay and click handler -->
     <div class="position-relative overflow-hidden recipe-image-container" @click="goToDetail">
       <img
         v-if="recipe.image"
@@ -50,31 +49,25 @@ export default {
     </div>
 
     <div class="card-body d-flex flex-column">
-      <!-- Title clickable -->
       <h5 class="card-title">
         <a href="#" class="stretched-link text-decoration-none text-dark" @click.prevent="goToDetail">
           {{ recipe.title }}
         </a>
       </h5>
 
-      <!-- Info row -->
       <p class="card-text mb-1">{{ recipe.readyInMinutes }} minutes</p>
       <p class="card-text mb-2">{{ recipe.aggregateLikes }} likes</p>
 
-      <!-- Badges for vegan / vegetarian / gluten-free -->
       <div class="mb-2">
         <span v-if="recipe.vegan" class="badge bg-success me-1">Vegan</span>
         <span v-else-if="recipe.vegetarian" class="badge bg-info text-dark me-1">Vegetarian</span>
         <span v-if="recipe.glutenFree" class="badge bg-warning text-dark me-1">Gluten Free</span>
       </div>
 
-      <!-- Indicators row -->
       <div class="mt-auto d-flex align-items-center justify-content-between">
-        <!-- Viewed indicator -->
         <span v-if="viewed" class="text-muted small">👁 Viewed</span>
         <span v-else class="text-muted small">&nbsp;</span>
 
-        <!-- Favorite button -->
         <button
           class="btn btn-link p-0 favorite-btn"
           @click.stop="toggleFavorite"
@@ -104,34 +97,32 @@ export default {
   },
   setup(props) {
     const router = useRouter();
-    const internalInstance = getCurrentInstance();
-    const store = internalInstance.appContext.config.globalProperties.store;
-    const toast = internalInstance.appContext.config.globalProperties.toast;
-    const server = store.server_domain; // e.g. "http://localhost:3000"
+    const internal = getCurrentInstance();
+    const store = internal.appContext.config.globalProperties.store;
+    const toast = internal.appContext.config.globalProperties.toast;
+    const server = store.server_domain;
 
     const viewed = ref(false);
     const favorite = ref(false);
     const favoriteLoading = ref(false);
 
-    // On mount, fetch favorite list and last viewed list if user is logged in
     onMounted(async () => {
       const id = props.recipe.id;
       if (!id) return;
-
       if (store.username) {
-        // 1. Fetch favorites
+        // fetch favorites
         try {
           const resp = await axios.get(`${server}/favoriteRecipes`, { withCredentials: true });
-          if (Array.isArray(resp.data) && resp.data.includes(id)) {
+          if (Array.isArray(resp.data) && resp.data.includes(String(id)) || resp.data.includes(id)) {
             favorite.value = true;
           }
         } catch (err) {
           console.error("Failed to fetch favorites:", err);
         }
-        // 2. Fetch last viewed
+        // fetch last viewed
         try {
           const resp2 = await axios.get(`${server}/last`, { withCredentials: true });
-          if (Array.isArray(resp2.data) && resp2.data.includes(id)) {
+          if (Array.isArray(resp2.data) && (resp2.data.includes(String(id)) || resp2.data.includes(id))) {
             viewed.value = true;
           }
         } catch (err) {
@@ -140,39 +131,32 @@ export default {
       }
     });
 
-    // Navigate to detail and record view
     async function goToDetail() {
       const id = props.recipe.id;
       if (!id) return;
       if (store.username) {
-        // Record viewed via backend
         try {
-          await axios.post(`${server}/view/${id}`, {}, { withCredentials: true });
+          await axios.post(`${server}/clickOnRecipe`, { recipeId: id }, { withCredentials: true });
           viewed.value = true;
         } catch (err) {
           console.error("Failed to record view:", err);
         }
       }
-      // Navigate to detail page: adjust route name as needed
+      // navigate using your route name; here assumed "recipe" with param recipeId
       router.push({ name: 'recipe', params: { recipeId: id } }).catch(() => {});
     }
 
-    // Toggle favorite: here only add (no removal if not required)
     async function toggleFavorite() {
       if (!store.username) {
         toast("Error", "Please log in to favorite recipes", "error");
         return;
       }
       const id = props.recipe.id;
-      if (!id) return;
-      if (favorite.value) {
-        // Already favorited, do nothing or optionally remove if backend supports
-        return;
-      }
+      if (!id || favorite.value) return;
       favoriteLoading.value = true;
       try {
-        // POST to add favorite; implement this endpoint in backend
-        await axios.post(`${server}/favoriteRecipes`, { recipeId: id }, { withCredentials: true });
+        // use POST /favoriteRecipes/:recipeId
+        await axios.post(`${server}/favoriteRecipes/${id}`, {}, { withCredentials: true });
         favorite.value = true;
         toast("Success", "Added to favorites", "success");
       } catch (err) {

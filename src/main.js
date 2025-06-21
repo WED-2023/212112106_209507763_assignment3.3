@@ -24,7 +24,8 @@ const router = createRouter({
 // Shared store
 const store = reactive({
   username: localStorage.getItem('username'),
-  server_domain: 'http://localhost:3000',
+  // server_domain: 'http://localhost:3000',
+  server_domain: process.env.VUE_APP_SERVER_DOMAIN || 'http://localhost:3000',
   login(username) {
     localStorage.setItem('username', username);
     this.username = username;
