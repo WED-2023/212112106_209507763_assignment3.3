@@ -151,6 +151,7 @@ import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { getCurrentInstance } from 'vue'; //
 
 export default {
   name: 'LoginPage',
@@ -161,6 +162,9 @@ export default {
       submitError: null,
     });
 
+    const internalInstance = getCurrentInstance(); //Abed
+    const store = internalInstance.appContext.config.globalProperties.store; //Abed
+ 
     const router = useRouter();
 
     const rules = {
@@ -182,6 +186,7 @@ export default {
       try {
         // If using a dev-server proxy to backend: call '/auth/login'
         // Otherwise, use full URL: 'http://localhost:3000/auth/login'
+        //const url = `${store.server_domain}/auth/login`;
         const url = 'http://localhost:3000/auth/login';
         await axios.post(
           url,
@@ -198,7 +203,8 @@ export default {
         // Example: window.store.login(state.username);
         // For now:
         console.log('Login successful');
-
+        store.login(state.username); // ??
+        console.log('Login successful:', store.username);
         // Redirect to main/dashboard
         router.push('/');
       } catch (err) {

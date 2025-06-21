@@ -37,6 +37,8 @@ const store = reactive({
   },
 });
 
+
+
 // Axios interceptors
 axios.interceptors.request.use((config) => config, (error) => Promise.reject(error));
 axios.interceptors.response.use((response) => response, (error) => Promise.reject(error));
@@ -56,6 +58,12 @@ app.component('BCol', BCol);
 
 // Global store
 app.config.globalProperties.store = store;
+
+//toast by Abed
+app.config.globalProperties.toast = (title, message, type) => {
+  alert(`[${type.toUpperCase()}] ${title}: ${message}`);
+};
+//toast by Abed
 
 // Mount app
 app.mount('#app');
