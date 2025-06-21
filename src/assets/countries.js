@@ -28,6 +28,7 @@ export default [
   "Bulgaria",
   "Burkina Faso",
   "Burundi",
+  "Circassia",
   "Cambodia",
   "Cameroon",
   "Canada",
