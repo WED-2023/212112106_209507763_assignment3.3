@@ -246,9 +246,9 @@ export default {
       // 2. If not yet recorded view but user is logged in, send POST to record
       if (store.username && !viewed.value) {
         try {
-          await axios.post(`${server}/clickOnRecipe`, { recipeId }, {
-            withCredentials: true
-          });
+          await axios.post(`${server}/recipes/clickOnRecipe`, { recipeId }, {
+          withCredentials: true
+        });
           viewed.value = true;
         } catch (err) {
           console.error("Failed to record view:", err);
@@ -272,9 +272,10 @@ export default {
       favoriteLoading.value = true;
       try {
         // Use your POST /favoriteRecipes/:recipeId endpoint
-        await axios.post(`${server}/favoriteRecipes/${recipeId}`, {}, {
+        await axios.post(`${server}/recipes/favoriteRecipes/${recipeId}`, {}, {
           withCredentials: true
         });
+        
         favorite.value = true;
         toast("Success", "Added to favorites", "success");
       } catch (err) {
