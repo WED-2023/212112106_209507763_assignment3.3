@@ -136,7 +136,7 @@ export default {
       if (!id) return;
       if (store.username) {
         try {
-          await axios.post(`${server}/clickOnRecipe`, { recipeId: id }, { withCredentials: true });
+          await axios.post(`${server}/users/clickOnRecipe`, { recipeId: id }, { withCredentials: true });
           viewed.value = true;
         } catch (err) {
           console.error("Failed to record view:", err);
@@ -156,7 +156,7 @@ export default {
       favoriteLoading.value = true;
       try {
         // use POST /favoriteRecipes/:recipeId
-        await axios.post(`${server}/favoriteRecipes/${id}`, {}, { withCredentials: true });
+        await axios.post(`${server}/users/favoriteRecipes/${id}`, {}, { withCredentials: true });
         favorite.value = true;
         toast("Success", "Added to favorites", "success");
       } catch (err) {

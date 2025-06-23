@@ -187,7 +187,7 @@ export default {
         // If using a dev-server proxy to backend: call '/auth/login'
         // Otherwise, use full URL: 'http://localhost:3000/auth/login'
         //const url = `${store.server_domain}/auth/login`;
-        const url = 'http://localhost:3000/auth/login';
+        const url = `${store.server_domain}/auth/login`;
         await axios.post(
           url,
           {
