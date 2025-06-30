@@ -2,8 +2,9 @@
 node_modules
 /dist
 
-
+tutorial_lab9.md
 # local env files
+.env
 .env.local
 .env.*.local
 
