@@ -53,9 +53,13 @@
               <li class="nav-item">
                 <span class="navbar-text text-white me-3">{{ store.username }}</span>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <router-link class="nav-link" :to="{ name: 'createRecipe' }">Create Recipe</router-link>
-              </li>
+              </li> -->
+
+            <li class="nav-item">
+            <a class="nav-link" href="#" @click.prevent="openCreateRecipeModal">Create Recipe</a>
+            </li>
               <!-- Personal dropdown -->
        <!-- <li class="nav-item dropdown">
           <button
@@ -98,6 +102,9 @@
       </div>
     </nav>
 
+
+        <!-- CreateRecipeModal component -->
+    <CreateRecipeModal @recipe-created-success="onRecipeCreated" ref="createModal" />
     <router-view />
   </div>
 </template>
@@ -105,13 +112,27 @@
 
 
 <script>
+import * as bootstrap from 'bootstrap';
 import { getCurrentInstance } from 'vue';
+import CreateRecipeModal from './components/CreateRecipeModal.vue';
 import axios from 'axios';
 export default {
   name: "App",
     components: {
-
+    CreateRecipeModal,
     },
+  methods: {
+        openCreateRecipeModal() {
+      // Use Bootstrap JS API to show modal
+      const modalEl = document.getElementById('createRecipeModal');
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    },
+    onRecipeCreated() {
+      // Optional: You can refresh a recipe list or show a toast here
+      console.log('Recipe created successfully!');
+    },
+  },
   setup() {
     const internalInstance = getCurrentInstance();
     const store = internalInstance.appContext.config.globalProperties.store;
@@ -123,6 +144,17 @@ export default {
     //   toast("Logout", "User logged out successfully", "success");
     //   router.push("/").catch(() => {});
     // };
+
+    // const openCreateRecipeModal = () => {
+    //   const createModal = internalInstance.appContext.config.globalProperties.$refs.createModal;
+    //   if (createModal) {
+    //     createModal.show();
+    //   } else {
+    //     console.error("CreateRecipeModal reference not found");
+    //   }
+    // };
+
+  
   const logout = async () => {
   try {
     await axios.post(`${process.env.VUE_APP_SERVER_DOMAIN}/auth/logout`, {}, { withCredentials: true });
