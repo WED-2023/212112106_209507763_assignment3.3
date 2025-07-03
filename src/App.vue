@@ -1,4 +1,3 @@
-
 <template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
@@ -8,13 +7,13 @@
 
         <!-- Toggler for small screens -->
         <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -53,44 +52,10 @@
               <li class="nav-item">
                 <span class="navbar-text text-white me-3">{{ store.username }}</span>
               </li>
-              <!-- <li class="nav-item">
-              <!-- <li class="nav-item">
-                <router-link class="nav-link" :to="{ name: 'createRecipe' }">Create Recipe</router-link>
-              </li> -->
-
-            <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="openCreateRecipeModal">Create Recipe</a>
-            </li>
-              </li> -->
-
-            <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="openCreateRecipeModal">Create Recipe</a>
-            </li>
-              <!-- Personal dropdown -->
-       <!-- <li class="nav-item dropdown">
-          <button
-            class="nav-link dropdown-toggle btn btn-link text-white"
-            type="button"
-            id="personalDropdown"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Personal
-          </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="personalDropdown">
-                  <li>
-                    <router-link class="dropdown-item" :to="{ name: 'favorites' }">My Favorite Recipes</router-link>
-                  </li>
-                  <li>
-                    <router-link class="dropdown-item" :to="{ name: 'myRecipes' }">My Recipes</router-link>
-                  </li>
-                  <li>
-                    <router-link class="dropdown-item" :to="{ name: 'familyRecipes' }">My Family Recipes</router-link>
-                  </li>
-                </ul>
-              </li> -->
-
-                    <li class="nav-item">
+              <li class="nav-item">
+                <a class="nav-link" href="#" @click.prevent="openCreateRecipeModal">Create Recipe</a>
+              </li>
+              <li class="nav-item">
                 <router-link class="nav-link" :to="{ name: 'favorites' }">My Favorite Recipes</router-link>
               </li>
               <li class="nav-item">
@@ -108,46 +73,25 @@
       </div>
     </nav>
 
-
-        <!-- CreateRecipeModal component -->
-    <CreateRecipeModal @recipe-created-success="onRecipeCreated" ref="createModal" />
-
-        <!-- CreateRecipeModal component -->
+    <!-- CreateRecipeModal component -->
     <CreateRecipeModal @recipe-created-success="onRecipeCreated" ref="createModal" />
     <router-view />
   </div>
 </template>
 
-
-
 <script>
-import * as bootstrap from 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import { getCurrentInstance } from 'vue';
 import CreateRecipeModal from './components/CreateRecipeModal.vue';
-import CreateRecipeModal from './components/CreateRecipeModal.vue';
 import axios from 'axios';
+
 export default {
   name: "App",
-    components: {
-    CreateRecipeModal,
-    },
-  methods: {
-        openCreateRecipeModal() {
-      // Use Bootstrap JS API to show modal
-      const modalEl = document.getElementById('createRecipeModal');
-      const modal = new bootstrap.Modal(modalEl);
-      modal.show();
-    },
-    onRecipeCreated() {
-      // Optional: You can refresh a recipe list or show a toast here
-      console.log('Recipe created successfully!');
-    },
+  components: {
+    CreateRecipeModal
   },
-    CreateRecipeModal,
-    },
   methods: {
-        openCreateRecipeModal() {
+    openCreateRecipeModal() {
       // Use Bootstrap JS API to show modal
       const modalEl = document.getElementById('createRecipeModal');
       const modal = new bootstrap.Modal(modalEl);
@@ -156,7 +100,7 @@ export default {
     onRecipeCreated() {
       // Optional: You can refresh a recipe list or show a toast here
       console.log('Recipe created successfully!');
-    },
+    }
   },
   setup() {
     const internalInstance = getCurrentInstance();
@@ -164,48 +108,21 @@ export default {
     const toast = internalInstance.appContext.config.globalProperties.toast;
     const router = internalInstance.appContext.config.globalProperties.$router;
 
-    // const logout = () => {
-    //   store.logout();
-    //   toast("Logout", "User logged out successfully", "success");
-    //   router.push("/").catch(() => {});
-    // };
+    const logout = async () => {
+      try {
+        await axios.post(`${process.env.VUE_APP_SERVER_DOMAIN}/auth/logout`, {}, { withCredentials: true });
+        store.logout(); // your custom logout method
+        toast("Logout", "User logged out successfully", "success");
+        router.push("/").catch(() => {});
+      } catch (error) {
+        toast("Error", "Failed to log out", "error");
+        console.error(error);
+      }
+    };
 
-    // const openCreateRecipeModal = () => {
-    //   const createModal = internalInstance.appContext.config.globalProperties.$refs.createModal;
-    //   if (createModal) {
-    //     createModal.show();
-    //   } else {
-    //     console.error("CreateRecipeModal reference not found");
-    //   }
-    // };
-
-  
-
-    // const openCreateRecipeModal = () => {
-    //   const createModal = internalInstance.appContext.config.globalProperties.$refs.createModal;
-    //   if (createModal) {
-    //     createModal.show();
-    //   } else {
-    //     console.error("CreateRecipeModal reference not found");
-    //   }
-    // };
-
-  
-  const logout = async () => {
-  try {
-    await axios.post(`${process.env.VUE_APP_SERVER_DOMAIN}/auth/logout`, {}, { withCredentials: true });
-    store.logout(); // your custom logout method
-    toast("Logout", "User logged out successfully", "success");
-    router.push("/").catch(() => {});
-  } catch (error) {
-    toast("Error", "Failed to log out", "error");
-    console.error(error);
-  }
-};
     return { store, logout };
   }
 }
-
 </script>
 
 <style lang="scss">
