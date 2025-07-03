@@ -145,10 +145,6 @@ export default {
 
 <!-- OPTION 3 FROM BOLT BELOW -->
 
-
-
-
-
 <template>
   <div class="main-page">
     <BContainer fluid class="py-4">
@@ -212,7 +208,7 @@ export default {
                   title="Last Viewed Recipes"
                   :recipes="lastViewed"
                   :class="{
-                    RandomRecipes: true,
+                    //RandomRecipes: true,
                     center: true,
                   }"
                 />
@@ -246,21 +242,91 @@ export default {
     const loadingRandom = ref(false); //Loading spinner
     const lastViewed = ref([]);
 
+
+
+  // Log when the component is mounted
+    onMounted(() => {
+      console.log('MainPage Component Mounted');
+      if (store.username) {
+        console.log('Username found, fetching last viewed recipes...');
+        fetchLastViewedRecipes();
+      } else {
+        console.log('No username found during onMounted.');
+      }
+      refreshRandomRecipes();
+    });
+
+
+
+    //Normalize recipe format by ABed for RecipePreview.vue 03072025
+function normalizeRecipe(recipe) {
+  // Helper to convert "00:45:00" to 45 (minutes)
+  function durationToMinutes(duration) {
+    if (typeof duration === 'number') return duration;
+    if (!duration) return 0;
+    const parts = duration.split(':').map(Number);
+    if (parts.length === 3) {
+      return parts[0] * 60 + parts[1] + Math.round(parts[2] / 60);
+    }
+    return 0;
+  }
+
+  return {
+    aggregateLikes: recipe.popularity ?? 0,
+    glutenFree: recipe.gluten_free ?? false,
+    id: Number(recipe.id),
+    image: recipe.recipe_image ?? recipe.image,
+    readyInMinutes: durationToMinutes(recipe.prep_duration ?? recipe.readyInMinutes),
+    title: recipe.recipe_title ?? recipe.title,
+    vegan: recipe.vegan ?? false,
+    vegetarian: recipe.vegetarian ?? false,
+    // Optionally add more fields as needed
+  };
+}
+
+//Normalize recipe format by ABed for RecipePreview.vue 03072025
+
     const fetchLastViewedRecipes = async () => {
-      if (!store.username) return;
+      console.log('Starting fetchLastViewedRecipes function...');
+        // Check if the username exists in the store
+      if (!store.username) {
+        console.log('No username found in store, exiting function...');
+        return; // Exit if no username is found
+      }
       try {
+        
         const idsResp = await axios.get(`${store.server_domain}/users/last`, {
           withCredentials: true
         });
+        // Log the received response
+        console.log('Received recipe IDs:', idsResp.data);
         const ids = idsResp.data;
-
+          // If no recipe IDs are returned, log this and return
+        if (ids.length === 0) {
+          console.log('No last viewed recipes found.');
+          return;
+        }
+         // Map the IDs to fetch recipe details for each ID
+        console.log(`Fetching details for ${ids.length} recipes...`);
         const recipePromises = ids.map(id =>
           axios.get(`${store.server_domain}/recipes/${id}`, { withCredentials: true })
         );
         const results = await Promise.all(recipePromises);
-        lastViewed.value = results.map(r => r.data);
+        // Log the received recipe details
+        console.log('Received recipe details:', results);
+        // lastViewed.value = results.map(r => r.data);
+        lastViewed.value = results.map(r => normalizeRecipe(r.data));
+        // Log the final recipes list
+        //console.log('Last viewed recipes set:', lastViewed.value);
+        console.log(JSON.parse(JSON.stringify(lastViewed.value)));
+
       } catch (err) {
         console.error('Failed to fetch last viewed recipes:', err);
+        if (err.response) {
+      // If the error has a response object (i.e., a server error response), log it
+          console.error('Error response:', err.response);
+          console.error('Error details:', err.response.data);
+    }
       }
     };
 
@@ -281,12 +347,12 @@ export default {
        }
     };
 
-    onMounted(() => {
-      if (store.username) {
-        fetchLastViewedRecipes();
-      }
-      refreshRandomRecipes();
-    });
+    // onMounted(() => {
+    //   if (store.username) {
+    //     fetchLastViewedRecipes();
+    //   }
+    //   refreshRandomRecipes();
+    // });
 
     return {
       store,

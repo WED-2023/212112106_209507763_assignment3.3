@@ -12,6 +12,8 @@ const store = reactive({
   logout() {
     console.log("logout");
     localStorage.removeItem('username');
+    // Clear cookies manually (optional, but ensures all cookies are cleared) BY ABED 03072025
+    document.cookie = "session=; path=/; domain=goldfarb-showgan.cs.bgu.ac.il; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     this.username = undefined;
   }
 });

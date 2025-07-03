@@ -112,7 +112,7 @@ export default {
       if (store.username) {
         // fetch favorites
         try {
-          const resp = await axios.get(`${server}/favoriteRecipes`, { withCredentials: true });
+          const resp = await axios.get(`${server}/users/favoriteRecipes`, { withCredentials: true });
           if (Array.isArray(resp.data) && resp.data.includes(String(id)) || resp.data.includes(id)) {
             favorite.value = true;
           }
@@ -121,7 +121,7 @@ export default {
         }
         // fetch last viewed
         try {
-          const resp2 = await axios.get(`${server}/last`, { withCredentials: true });
+          const resp2 = await axios.get(`${server}/users/last`, { withCredentials: true });
           if (Array.isArray(resp2.data) && (resp2.data.includes(String(id)) || resp2.data.includes(id))) {
             viewed.value = true;
           }
