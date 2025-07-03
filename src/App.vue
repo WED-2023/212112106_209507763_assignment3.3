@@ -54,7 +54,13 @@
                 <span class="navbar-text text-white me-3">{{ store.username }}</span>
               </li>
               <!-- <li class="nav-item">
+              <!-- <li class="nav-item">
                 <router-link class="nav-link" :to="{ name: 'createRecipe' }">Create Recipe</router-link>
+              </li> -->
+
+            <li class="nav-item">
+            <a class="nav-link" href="#" @click.prevent="openCreateRecipeModal">Create Recipe</a>
+            </li>
               </li> -->
 
             <li class="nav-item">
@@ -105,6 +111,9 @@
 
         <!-- CreateRecipeModal component -->
     <CreateRecipeModal @recipe-created-success="onRecipeCreated" ref="createModal" />
+
+        <!-- CreateRecipeModal component -->
+    <CreateRecipeModal @recipe-created-success="onRecipeCreated" ref="createModal" />
     <router-view />
   </div>
 </template>
@@ -113,12 +122,28 @@
 
 <script>
 import * as bootstrap from 'bootstrap';
+import * as bootstrap from 'bootstrap';
 import { getCurrentInstance } from 'vue';
+import CreateRecipeModal from './components/CreateRecipeModal.vue';
 import CreateRecipeModal from './components/CreateRecipeModal.vue';
 import axios from 'axios';
 export default {
   name: "App",
     components: {
+    CreateRecipeModal,
+    },
+  methods: {
+        openCreateRecipeModal() {
+      // Use Bootstrap JS API to show modal
+      const modalEl = document.getElementById('createRecipeModal');
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    },
+    onRecipeCreated() {
+      // Optional: You can refresh a recipe list or show a toast here
+      console.log('Recipe created successfully!');
+    },
+  },
     CreateRecipeModal,
     },
   methods: {
@@ -144,6 +169,17 @@ export default {
     //   toast("Logout", "User logged out successfully", "success");
     //   router.push("/").catch(() => {});
     // };
+
+    // const openCreateRecipeModal = () => {
+    //   const createModal = internalInstance.appContext.config.globalProperties.$refs.createModal;
+    //   if (createModal) {
+    //     createModal.show();
+    //   } else {
+    //     console.error("CreateRecipeModal reference not found");
+    //   }
+    // };
+
+  
 
     // const openCreateRecipeModal = () => {
     //   const createModal = internalInstance.appContext.config.globalProperties.$refs.createModal;
