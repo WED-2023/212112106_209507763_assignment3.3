@@ -1,6 +1,15 @@
 <template>
-  <div class="container">
-    <h1>TODO MyFamilyRecipesPage</h1>
-    <router-link to="/" exact>ET Go Home</router-link>
-  </div>
+  <GenericRecipePreviewPage
+      title="My Family Recipes"
+      fetch-path="/users/familyRecipes"
+      log-purpose="Family recipes Page"
+  />
 </template>
+
+<script>
+import GenericRecipePreviewPage from '@/components/GenericRecipePreviewPage.vue';
+export default {
+  name: 'familyRecipes',
+  components: { GenericRecipePreviewPage }
+}
+</script>
