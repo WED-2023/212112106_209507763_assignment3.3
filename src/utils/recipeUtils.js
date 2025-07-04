@@ -59,11 +59,11 @@ export async function fetchRecipes({
 
         // Step 2: fetch each full recipe by ID
         console.log(`[${logPurpose}] Fetching ${ids.length} recipes...`);
-
+        console.log("Recipe IDs being fetched:", ids);
         const requests = ids.map(id =>
             axios.get(`${serverDomain}/recipes/${id}`, { withCredentials })
         );
-
+        
         const results = await Promise.all(requests);
         const recipes = results.map(r => normalizeRecipe(r.data));
         console.log(`[${logPurpose}] Done. ${recipes.length} recipes loaded.`);
