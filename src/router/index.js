@@ -58,17 +58,17 @@ const routes = [
   },
    {
     path: "/personal",
-    name: "",
+    name: "myRecipes",
     component: () => import("../pages/MyRecipesPage.vue"),
   },
    {
     path: "/favorites",
-    name: "",
+    name: "favorites",
     component: () => import("../pages/MyFavoritesPage.vue"),
   },
    {
     path: "/family",
-    name: "",
+    name: "familyRecipes",
     component: () => import("../pages/MyFamilyRecipesPage.vue"),
   },
   {
