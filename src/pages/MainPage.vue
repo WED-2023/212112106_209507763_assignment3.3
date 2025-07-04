@@ -206,7 +206,7 @@ export default {
               <div v-else>
                 <RecipePreviewList
                   title="Last Viewed Recipes"
-                  :recipes="lastViewed"
+                  :recipes="lastRecipes"
                   :class="{
                     //RandomRecipes: true,
                     center: true,
@@ -226,8 +226,8 @@ import { getCurrentInstance, onMounted, ref } from 'vue';
 import { BContainer, BRow, BCol, BCard, BCardBody, BButton } from 'bootstrap-vue-3';
 import RecipePreviewList from '../components/RecipePreviewList.vue';
 import LoginCard from '../components/LoginCard.vue';
+import {fetchRecipes} from "@/utils/recipeUtils";
 import axios from 'axios';
-
 export default {
   name: 'MainPage',
   components: {
@@ -236,13 +236,17 @@ export default {
     LoginCard
   },
   setup() {
-    const internalInstance = getCurrentInstance();
-    const store = internalInstance.appContext.config.globalProperties.store;
+
     const randomRecipes = ref([]); //Random Recipes
     const loadingRandom = ref(false); //Loading spinner
-    const lastViewed = ref([]);
+    const loadingLast = ref(false); //Loading spinner
 
+    const lastRecipes = ref([]);
+    const error = ref(null);
 
+    const { appContext } = getCurrentInstance();
+    const store = appContext.config.globalProperties.store;
+    const toast = appContext.config.globalProperties.toast;
 
   // Log when the component is mounted
     onMounted(() => {
@@ -258,81 +262,25 @@ export default {
 
 
 
-    //Normalize recipe format by ABed for RecipePreview.vue 03072025
-function normalizeRecipe(recipe) {
-  // Helper to convert "00:45:00" to 45 (minutes)
-  function durationToMinutes(duration) {
-    if (typeof duration === 'number') return duration;
-    if (!duration) return 0;
-    const parts = duration.split(':').map(Number);
-    if (parts.length === 3) {
-      return parts[0] * 60 + parts[1] + Math.round(parts[2] / 60);
-    }
-    return 0;
-  }
-
-  return {
-    aggregateLikes: recipe.popularity ?? 0,
-    glutenFree: recipe.gluten_free ?? false,
-    id: Number(recipe.id),
-    image: recipe.recipe_image ?? recipe.image,
-    readyInMinutes: durationToMinutes(recipe.prep_duration ?? recipe.readyInMinutes),
-    title: recipe.recipe_title ?? recipe.title,
-    vegan: recipe.vegan ?? false,
-    vegetarian: recipe.vegetarian ?? false,
-    // Optionally add more fields as needed
-  };
-}
-
-//Normalize recipe format by ABed for RecipePreview.vue 03072025
-
     const fetchLastViewedRecipes = async () => {
-      console.log('Starting fetchLastViewedRecipes function...');
-        // Check if the username exists in the store
-      if (!store.username) {
-        console.log('No username found in store, exiting function...');
-        return; // Exit if no username is found
-      }
+      error.value = null;
+      loadingLast.value = true;
       try {
-        
-        const idsResp = await axios.get(`${store.server_domain}/users/last`, {
-          withCredentials: true
+        lastRecipes.value = await fetchRecipes({
+          path: '/users/last',
+          serverDomain: store.server_domain,
+          logPurpose: 'Last Viewed'
         });
-        // Log the received response
-        console.log('Received recipe IDs:', idsResp.data);
-        const ids = idsResp.data;
-          // If no recipe IDs are returned, log this and return
-        if (ids.length === 0) {
-          console.log('No last viewed recipes found.');
-          return;
-        }
-         // Map the IDs to fetch recipe details for each ID
-        console.log(`Fetching details for ${ids.length} recipes...`);
-        const recipePromises = ids.map(id =>
-          axios.get(`${store.server_domain}/recipes/${id}`, { withCredentials: true })
-        );
-        const results = await Promise.all(recipePromises);
-        // Log the received recipe details
-        console.log('Received recipe details:', results);
-        // lastViewed.value = results.map(r => r.data);
-        lastViewed.value = results.map(r => normalizeRecipe(r.data));
-        // Log the final recipes list
-        //console.log('Last viewed recipes set:', lastViewed.value);
-        console.log(JSON.parse(JSON.stringify(lastViewed.value)));
-
       } catch (err) {
-        console.error('Failed to fetch last viewed recipes:', err);
-        if (err.response) {
-      // If the error has a response object (i.e., a server error response), log it
-          console.error('Error response:', err.response);
-          console.error('Error details:', err.response.data);
-    }
+        error.value = 'Failed to load favorite recipes.';
+        toast('Error', error.value, 'error');
+      } finally {
+        loadingLast.value = false;
       }
-    };
+    }
 
-    
-      
-      const refreshRandomRecipes = async () => {
+
+    const refreshRandomRecipes = async () => {
       loadingRandom.value = true;
       try {
         const response = await axios.get(`${store.server_domain}/recipes/random`, {
@@ -343,8 +291,8 @@ function normalizeRecipe(recipe) {
       } catch (err) {
         console.error("Error fetching random recipes:", err);
       }finally {
-    loadingRandom.value = false;
-       }
+        loadingRandom.value = false;
+      }
     };
 
     // onMounted(() => {
@@ -356,10 +304,13 @@ function normalizeRecipe(recipe) {
 
     return {
       store,
-      lastViewed,
-         randomRecipes,
-      refreshRandomRecipes,
-      fetchLastViewedRecipes
+      lastRecipes,
+      randomRecipes,
+      loadingLast,
+      loadingRandom,
+      error,
+      fetchLastViewedRecipes,
+      refreshRandomRecipes
     };
   }
 };

@@ -67,6 +67,7 @@ export async function fetchRecipes({
         const results = await Promise.all(requests);
         const recipes = results.map(r => normalizeRecipe(r.data));
         console.log(`[${logPurpose}] Done. ${recipes.length} recipes loaded.`);
+        console.log(`[${logPurpose}] Loaded recipe IDs: ${recipes.map(r => r.id).join(', ')}`);
 
         return recipes;
 
