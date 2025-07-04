@@ -57,17 +57,17 @@ const routes = [
     component: () => import("../pages/CreateRecipePage.vue"),
   },
    {
-    path: "/my-recipes",
+    path: "/personal",
     name: "",
     component: () => import("../pages/MyRecipesPage.vue"),
   },
    {
-    path: "/favorite-recipes",
+    path: "/favorites",
     name: "",
     component: () => import("../pages/MyFavoritesPage.vue"),
   },
    {
-    path: "/family-recipes",
+    path: "/family",
     name: "",
     component: () => import("../pages/MyFamilyRecipesPage.vue"),
   },
@@ -81,21 +81,6 @@ const routes = [
       path: '/about',
       name: 'about',
       component: () => import("../pages/AboutPage.vue")
-    },
-    {
-      path: '/favorites',
-      name: 'favorites',
-      component: () => import("../pages/MyFavoritesPage.vue")
-    },
-    {
-      path: '/my-recipes',
-      name: 'myRecipes',
-      component: () => import("../pages/MyRecipesPage.vue")
-    },
-    {
-      path: '/family-recipes',
-      name: 'familyRecipes',
-      component: () => import("../pages/MyFamilyRecipesPage.vue")
     },
     {
       path: '/create',
