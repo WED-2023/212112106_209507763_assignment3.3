@@ -20,7 +20,7 @@
     <div v-else>
       <RecipePreviewList
           title=""
-          :recipes="recipes"
+          :recipes="sortedRecipes" 
           :is-favorite="isFavorite"
       />
     </div>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref, onMounted, getCurrentInstance, computed } from 'vue';
 import RecipePreviewList from '@/components/RecipePreviewList.vue';
 import { fetchRecipes } from '@/utils/recipeUtils';
 
@@ -40,7 +40,9 @@ export default {
     fetchPath: { type: String, required: false },
     recipeIDs: { type: Array, required: false },
     logPurpose: { type: String, default: 'Recipe Page' },
+    sortBy: { type: String, default: 'popularity' },
     isFavorite: { type: Boolean, default: false }
+    
   },
   setup(props) {
     const recipes = ref([]);
@@ -50,6 +52,15 @@ export default {
     const { appContext } = getCurrentInstance();
     const store = appContext.config.globalProperties.store;
     const toast = appContext.config.globalProperties.toast;
+
+    const sortedRecipes = computed(() => {
+      if (!recipes.value || recipes.value.length === 0) return [];
+      if (props.sortBy === 'duration') {
+        return [...recipes.value].sort((a, b) => (a.readyInMinutes ?? 99999) - (b.readyInMinutes ?? 99999));
+      } else {
+        return [...recipes.value].sort((a, b) => (b.aggregateLikes ?? 0) - (a.aggregateLikes ?? 0));
+      }
+    });
 
     onMounted(async () => {
       try {
@@ -71,6 +82,7 @@ export default {
 
     return {
       recipes,
+      sortedRecipes,
       loading,
       error
     };

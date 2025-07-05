@@ -55,7 +55,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="#" @click.prevent="openCreateRecipeModal">Create Recipe</a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <router-link class="nav-link" :to="{ name: 'favorites' }">My Favorite Recipes</router-link>
               </li>
               <li class="nav-item">
@@ -63,7 +63,32 @@
               </li>
               <li class="nav-item">
                 <router-link class="nav-link" :to="{ name: 'familyRecipes' }">My Family Recipes</router-link>
-              </li>
+              </li> -->
+            <!-- Personal Dropdown -->
+            <li class="nav-item dropdown">
+           <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="personalDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+                Personal
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="personalDropdown">
+                <li>
+                  <router-link class="dropdown-item" :to="{ name: 'myRecipes' }">My Recipes</router-link>
+                </li>
+                <li>
+                  <router-link class="dropdown-item" :to="{ name: 'familyRecipes' }">Family Recipes</router-link>
+                </li>
+                <li>
+                  <router-link class="dropdown-item" :to="{ name: 'favorites' }">My Favorite Recipes</router-link>
+                </li>
+              </ul>
+            </li>
+
               <li class="nav-item">
                 <button class="btn btn-link nav-link text-white" @click="logout">Logout</button>
               </li>
@@ -81,6 +106,9 @@
 
 <script>
 import * as bootstrap from 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 import { getCurrentInstance } from 'vue';
 import CreateRecipeModal from './components/CreateRecipeModal.vue';
 import axios from 'axios';
