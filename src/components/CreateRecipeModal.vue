@@ -8,42 +8,105 @@
         </div>
         <div class="modal-body">
           <form @submit.prevent="submitRecipe">
+            <!-- Title -->
             <div class="mb-3">
               <label class="form-label">Recipe Title</label>
-              <input v-model="state.recipe_title" type="text" class="form-control" :class="{ 'is-invalid': v$.recipe_title.$invalid && v$.recipe_title.$dirty }" />
+              <input
+                  v-model="state.recipe_title"
+                  @blur="v$.recipe_title.$touch()"
+                  @input="v$.recipe_title.$touch()"
+                  type="text"
+                  class="form-control"
+                  :class="{ 'is-invalid': v$.recipe_title.$dirty && v$.recipe_title.$invalid }"
+              />
+              <div class="invalid-feedback" v-if="v$.recipe_title.$dirty && v$.recipe_title.$invalid">
+                <div v-for="err in v$.recipe_title.$errors" :key="err.$uid">{{ err.$message }}</div>
+              </div>
             </div>
 
+            <!-- Image URL (not validated) -->
             <div class="mb-3">
               <label class="form-label">Image URL</label>
               <input v-model="state.recipe_image" type="text" class="form-control" />
             </div>
 
+            <!-- Prep Duration -->
             <div class="mb-3">
               <label class="form-label">Preparation Duration (minutes)</label>
-              <input v-model.number="state.prep_duration" type="number" min="1" class="form-control" />
+              <input
+                  v-model.number="state.prep_duration"
+                  @blur="v$.prep_duration.$touch()"
+                  @input="v$.prep_duration.$touch()"
+                  type="number"
+                  min="1"
+                  class="form-control"
+                  :class="{ 'is-invalid': v$.prep_duration.$dirty && v$.prep_duration.$invalid }"
+              />
+              <div class="invalid-feedback" v-if="v$.prep_duration.$dirty && v$.prep_duration.$invalid">
+                <div v-for="err in v$.prep_duration.$errors" :key="err.$uid">{{ err.$message }}</div>
+              </div>
             </div>
 
+            <!-- Amount of Meals -->
             <div class="mb-3">
               <label class="form-label">Amount of Meals</label>
-              <input v-model.number="state.amount_of_meals" type="number" min="1" class="form-control" />
+              <input
+                  v-model.number="state.amount_of_meals"
+                  @blur="v$.amount_of_meals.$touch()"
+                  @input="v$.amount_of_meals.$touch()"
+                  type="number"
+                  min="1"
+                  class="form-control"
+                  :class="{ 'is-invalid': v$.amount_of_meals.$dirty && v$.amount_of_meals.$invalid }"
+              />
+              <div class="invalid-feedback" v-if="v$.amount_of_meals.$dirty && v$.amount_of_meals.$invalid">
+                <div v-for="err in v$.amount_of_meals.$errors" :key="err.$uid">{{ err.$message }}</div>
+              </div>
             </div>
 
+            <!-- Instructions -->
             <div class="mb-3">
               <label class="form-label">Instructions</label>
-              <textarea v-model="state.instructions" class="form-control" rows="4"></textarea>
+              <textarea
+                  v-model="state.instructions"
+                  @blur="v$.instructions.$touch()"
+                  @input="v$.instructions.$touch()"
+                  class="form-control"
+                  rows="4"
+                  :class="{ 'is-invalid': v$.instructions.$dirty && v$.instructions.$invalid }"
+              ></textarea>
+              <div class="invalid-feedback" v-if="v$.instructions.$dirty && v$.instructions.$invalid">
+                <div v-for="err in v$.instructions.$errors" :key="err.$uid">{{ err.$message }}</div>
+              </div>
             </div>
 
+            <!-- Ingredients -->
             <div class="mb-3">
               <label class="form-label">Ingredients (comma separated)</label>
-              <input v-model="state.ingredientInput" type="text" class="form-control" @keyup.enter.prevent="addIngredient" />
+              <input
+                  v-model="state.ingredientInput"
+                  type="text"
+                  class="form-control"
+                  @keyup.enter.prevent="addIngredient"
+                  @blur="v$.extendedIngredients.$touch()"
+                  @input="v$.extendedIngredients.$touch()"
+              />
               <div class="mt-2">
-                <span class="badge bg-secondary me-1" v-for="(ing, index) in state.extendedIngredients" :key="index">
+                <span
+                    class="badge bg-secondary me-1"
+                    v-for="(ing, index) in state.extendedIngredients"
+                    :key="index"
+                >
                   {{ ing }}
                   <button type="button" class="btn-close btn-close-white ms-1" aria-label="Remove" @click="removeIngredient(index)"></button>
                 </span>
               </div>
+              <div class="invalid-feedback d-block" v-if="v$.extendedIngredients.$dirty && v$.extendedIngredients.$invalid">
+                <div v-for="err in v$.extendedIngredients.$errors" :key="err.$uid">{{ err.$message }}</div>
+              </div>
             </div>
 
+            <!-- Dietary Flags -->
             <div class="mb-3 form-check">
               <input v-model="state.vegetarian" type="checkbox" class="form-check-input" id="veg" />
               <label class="form-check-label" for="veg">Vegetarian</label>
@@ -59,6 +122,7 @@
               <label class="form-check-label" for="gluten">Gluten Free</label>
             </div>
 
+            <!-- Submit -->
             <button type="submit" class="btn btn-primary">Create Recipe</button>
           </form>
         </div>
@@ -67,13 +131,15 @@
   </div>
 </template>
 
+
+
 <script>
 
 
 import * as bootstrap from 'bootstrap';
 import { reactive, getCurrentInstance } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-import { required, minLength, numeric } from '@vuelidate/validators';
+import { required, minLength, numeric, helpers } from '@vuelidate/validators';
 import axios from 'axios';
 
 export default {
@@ -96,16 +162,30 @@ export default {
       ingredientInput: '',
     });
 
-    const rules = {
-      recipe_title: { required },
-      instructions: { required, minLength: minLength(10) },
-      prep_duration: { required, numeric },
-      amount_of_meals: { required, numeric },
-      extendedIngredients: {
-        required: (val) => val.length > 0 || 'At least one ingredient is required'
-      },
-    };
 
+    const rules = {
+      recipe_title: {
+        required: helpers.withMessage('Recipe title is required', required)
+      },
+      instructions: {
+        required: helpers.withMessage('Instructions are required', required),
+        minLength: helpers.withMessage('Instructions must be at least 10 characters', minLength(10))
+      },
+      prep_duration: {
+        required: helpers.withMessage('Preparation time is required', required),
+        numeric: helpers.withMessage('Must be a valid number', numeric)
+      },
+      amount_of_meals: {
+        required: helpers.withMessage('Amount of meals is required', required),
+        numeric: helpers.withMessage('Must be a valid number', numeric)
+      },
+      extendedIngredients: {
+        required: helpers.withMessage(
+            'At least one ingredient is required',
+            () => state.extendedIngredients.length > 0
+        )
+      }
+    };
     const v$ = useVuelidate(rules, state);
 
     const addIngredient = () => {
