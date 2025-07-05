@@ -107,7 +107,7 @@ export async function fetchRecipes({
         // Step 1: fetch recipe IDs if not provided
         let recipeIds = ids;
         if (!recipeIds && path) {
-            const idRes = await axios.get(`${serverDomain}${path}`, { withCredentials });
+            const idRes = await axios.get(`${serverDomain}/api${path}`, { withCredentials });
             recipeIds = idRes.data;
         }
 
@@ -119,7 +119,7 @@ export async function fetchRecipes({
         // Step 2: fetch each full recipe by ID
         console.log(`[${logPurpose}] Fetching ${recipeIds.length} recipes...`);
         const requests = recipeIds.map(id =>
-            axios.get(`${serverDomain}/recipes/${id}`, {
+            axios.get(`${serverDomain}/api/recipes/${id}`, {
                 withCredentials,
                 headers: req && req.headers.cookie ? { cookie: req.headers.cookie } : {},
             })

@@ -224,7 +224,7 @@ export default {
 
       // 1. Fetch full details
       try {
-        const resp = await axios.get(`${server}/recipes/${recipeId}`, {
+        const resp = await axios.get(`${server}/api/recipes/${recipeId}`, {
           withCredentials: true
         });
         const data = resp.data;

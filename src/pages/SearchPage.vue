@@ -185,7 +185,7 @@ const onSearch = async () => {
   if (selectedIntolerance.value) params.intolerances = selectedIntolerance.value;
 
   try {
-    const resp = await axios.get(`${store.server_domain}/recipes/search`, {
+    const resp = await axios.get(`${store.server_domain}/api/recipes/search`, {
       params,
       withCredentials: true,
     });

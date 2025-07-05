@@ -138,7 +138,7 @@ export default {
 
     const logout = async () => {
       try {
-        await axios.post(`${process.env.VUE_APP_SERVER_DOMAIN}/auth/logout`, {}, { withCredentials: true });
+        await axios.post(`${process.env.VUE_APP_SERVER_DOMAIN}/api/auth/logout`, {}, { withCredentials: true });
         store.logout(); // your custom logout method
         toast("Logout", "User logged out successfully", "success");
         router.push("/").catch(() => {});
