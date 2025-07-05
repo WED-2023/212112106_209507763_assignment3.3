@@ -38,41 +38,100 @@ export function normalizeRecipe(recipe) {
  * @param {boolean} [options.withCredentials=true]
  * @returns {Promise<Array>} Normalized recipe objects
  */
+// export async function fetchRecipes({
+//                                        path,
+//                                        serverDomain,
+//                                        logPurpose = 'Recipe fetch',
+//                                        withCredentials = true
+//                                    })
+// {
+//     console.log(`[${logPurpose}] Starting fetch from ${path}...`);
+
+//     try {
+//         // Step 1: fetch recipe IDs
+//         const idRes = await axios.get(`${serverDomain}${path}`, { withCredentials });
+//         const ids = idRes.data;
+
+//         if (!Array.isArray(ids) || ids.length === 0) {
+//             console.log(`[${logPurpose}] No recipes found.`);
+//             return [];
+//         }
+
+//         // Step 2: fetch each full recipe by ID
+//         console.log(`[${logPurpose}] Fetching ${ids.length} recipes...`);
+//         console.log("Recipe IDs being fetched:", ids);
+//         const requests = ids.map(id =>
+//             axios.get(`${serverDomain}/recipes/${id}`, { withCredentials })
+//         );
+        
+//         const results = await Promise.all(requests);
+//         console.log('[${logPurpose}] results in FetchRecipes before Normalization: ', results); //Abed
+//         const recipes = results.map(r => normalizeRecipe(r.data));
+//         console.log('[${logPurpose}] results in FetchRecipes before Normalization: ', recipes); //Abed
+//         console.log(`[${logPurpose}] Done. ${recipes.length} recipes loaded.`);
+//         console.log(`[${logPurpose}] Loaded recipe IDs: ${recipes.map(r => r.id).join(', ')}`);
+
+//         return recipes;
+
+//     } catch (err) {
+//         console.error(`[${logPurpose}] Failed to fetch recipes from ${path}:`, err);
+//         throw err;
+//     }
+// }
+
+
+
+/**
+ * Fetches full recipe objects by ID list or by path to an endpoint that returns IDs.
+ *
+ * @param {Object} options
+ * @param {string} [options.path] - API path that returns an array of recipe IDs
+ * @param {Array} [options.ids] - Array of recipe IDs (if already known)
+ * @param {string} options.serverDomain - Full domain like http://localhost:3000
+ * @param {string} [options.logPurpose] - Name for logging/debugging
+ * @param {boolean} [options.withCredentials=true]
+ * @param {Object} [options.req] - Express request object (for cookies/session)
+ * @returns {Promise<Array>} Normalized recipe objects
+ */
 export async function fetchRecipes({
-                                       path,
-                                       serverDomain,
-                                       logPurpose = 'Recipe fetch',
-                                       withCredentials = true
-                                   })
-{
-    console.log(`[${logPurpose}] Starting fetch from ${path}...`);
+    path,
+    ids,
+    serverDomain,
+    logPurpose = 'Recipe fetch',
+    withCredentials = true,
+    req
+}) {
+    console.log(`[${logPurpose}] Starting fetch...`);
 
     try {
-        // Step 1: fetch recipe IDs
-        const idRes = await axios.get(`${serverDomain}${path}`, { withCredentials });
-        const ids = idRes.data;
+        // Step 1: fetch recipe IDs if not provided
+        let recipeIds = ids;
+        if (!recipeIds && path) {
+            const idRes = await axios.get(`${serverDomain}${path}`, { withCredentials });
+            recipeIds = idRes.data;
+        }
 
-        if (!Array.isArray(ids) || ids.length === 0) {
+        if (!Array.isArray(recipeIds) || recipeIds.length === 0) {
             console.log(`[${logPurpose}] No recipes found.`);
             return [];
         }
 
         // Step 2: fetch each full recipe by ID
-        console.log(`[${logPurpose}] Fetching ${ids.length} recipes...`);
-        console.log("Recipe IDs being fetched:", ids);
-        const requests = ids.map(id =>
-            axios.get(`${serverDomain}/recipes/${id}`, { withCredentials })
+        console.log(`[${logPurpose}] Fetching ${recipeIds.length} recipes...`);
+        const requests = recipeIds.map(id =>
+            axios.get(`${serverDomain}/recipes/${id}`, {
+                withCredentials,
+                headers: req && req.headers.cookie ? { cookie: req.headers.cookie } : {},
+            })
         );
-        
+
         const results = await Promise.all(requests);
         const recipes = results.map(r => normalizeRecipe(r.data));
         console.log(`[${logPurpose}] Done. ${recipes.length} recipes loaded.`);
-        console.log(`[${logPurpose}] Loaded recipe IDs: ${recipes.map(r => r.id).join(', ')}`);
-
         return recipes;
 
     } catch (err) {
-        console.error(`[${logPurpose}] Failed to fetch recipes from ${path}:`, err);
+        console.error(`[${logPurpose}] Failed to fetch recipes:`, err);
         throw err;
     }
 }

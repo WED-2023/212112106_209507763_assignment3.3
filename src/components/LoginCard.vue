@@ -40,12 +40,12 @@
         </BFormGroup>
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <BFormCheckbox v-model="state.rememberMe">
+          <!-- <BFormCheckbox v-model="state.rememberMe">
             Remember me
-          </BFormCheckbox>
-          <BLink href="#" class="text-decoration-none small">
+          </BFormCheckbox> -->
+          <!-- <BLink href="#" class="text-decoration-none small">
             Forgot password?
-          </BLink>
+          </BLink> -->
         </div>
 
         <BButton type="submit" variant="primary" size="lg" block :disabled="loading">
@@ -81,7 +81,6 @@ export default {
     const state = reactive({
       username: '',
       password: '',
-      rememberMe: false,
       submitError: null,
     });
 

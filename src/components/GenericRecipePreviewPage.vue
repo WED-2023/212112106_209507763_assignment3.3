@@ -37,7 +37,8 @@ export default {
   components: { RecipePreviewList },
   props: {
     title: { type: String, required: true },
-    fetchPath: { type: String, required: true },
+    fetchPath: { type: String, required: false },
+    recipeIDs: { type: Array, required: false },
     logPurpose: { type: String, default: 'Recipe Page' },
     isFavorite: { type: Boolean, default: false }
   },
@@ -54,9 +55,12 @@ export default {
       try {
         recipes.value = await fetchRecipes({
           path: props.fetchPath,
+          ids: props.recipeIDs || null, //by abed
+          withCredentials: true, // by abed
           serverDomain: store.server_domain,
           logPurpose: props.logPurpose
         });
+      console.log('Loaded recipes in genericPreview:', recipes.value); // <-- Add this
       } catch (err) {
         error.value = 'Failed to load recipes.';
         toast('Error', error.value, 'error');
