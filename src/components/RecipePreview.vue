@@ -109,26 +109,26 @@ export default {
     onMounted(async () => {
       const id = props.recipe.id;
       if (!id) return;
-      if (store.username) {
-        // fetch favorites
-        try {
-          const resp = await axios.get(`${server}/users/favoriteRecipes`, { withCredentials: true });
-          if (Array.isArray(resp.data) && resp.data.includes(String(id)) || resp.data.includes(id)) {
-            favorite.value = true;
-          }
-        } catch (err) {
-          console.error("Failed to fetch favorites:", err);
-        }
-        // fetch last viewed
-        try {
-          const resp2 = await axios.get(`${server}/users/last`, { withCredentials: true });
-          if (Array.isArray(resp2.data) && (resp2.data.includes(String(id)) || resp2.data.includes(id))) {
-            viewed.value = true;
-          }
-        } catch (err) {
-          console.error("Failed to fetch last viewed:", err);
-        }
-      }
+      // if (store.username) {
+      //   // fetch favorites
+      //   try {
+      //     const resp = await axios.get(`${server}/api/users/favoriteRecipes`, { withCredentials: true });
+      //     if (Array.isArray(resp.data) && resp.data.includes(String(id)) || resp.data.includes(id)) {
+      //       favorite.value = true;
+      //     }
+      //   } catch (err) {
+      //     console.error("Failed to fetch favorites:", err);
+      //   }
+      //   // fetch last viewed
+      //   try {
+      //     const resp2 = await axios.get(`${server}/api/users/last`, { withCredentials: true });
+      //     if (Array.isArray(resp2.data) && (resp2.data.includes(String(id)) || resp2.data.includes(id))) {
+      //       viewed.value = true;
+      //     }
+      //   } catch (err) {
+      //     console.error("Failed to fetch last viewed:", err);
+      //   }
+      // }
     });
 
     async function goToDetail() {
@@ -136,7 +136,7 @@ export default {
       if (!id) return;
       if (store.username) {
         try {
-          await axios.post(`${server}/users/clickOnRecipe`, { recipeId: id }, { withCredentials: true });
+          await axios.post(`${server}/api/users/clickOnRecipe`, { recipeId: id }, { withCredentials: true });
           viewed.value = true;
         } catch (err) {
           console.error("Failed to record view:", err);

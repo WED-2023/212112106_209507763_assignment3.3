@@ -283,7 +283,7 @@ export default {
     const refreshRandomRecipes = async () => {
       loadingRandom.value = true;
       try {
-        const response = await axios.get(`${store.server_domain}/recipes/random`, {
+        const response = await axios.get(`${store.server_domain}/api/recipes/random`, {
           withCredentials: true
         });
         console.log("Random recipes in refresh:", response.data); //  Check image/title/etc. here
