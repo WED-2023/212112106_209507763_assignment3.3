@@ -229,7 +229,7 @@ export default {
 
         console.log("Payload being sent:", payload);
 
-        await axios.post(`${store.server_domain}/recipes/create`, payload, {
+        await axios.post(`${store.server_domain}/api/recipes/create`, payload, {
           withCredentials: true,
         });
 

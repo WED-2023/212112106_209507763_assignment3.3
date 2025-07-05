@@ -156,7 +156,7 @@ export default {
       favoriteLoading.value = true;
       try {
         // use POST /favoriteRecipes/:recipeId
-        await axios.post(`${server}/users/favoriteRecipes/${id}`, {}, { withCredentials: true });
+        await axios.post(`${server}/api/users/favoriteRecipes/${id}`, {}, { withCredentials: true });
         favorite.value = true;
         toast("Success", "Added to favorites", "success");
       } catch (err) {

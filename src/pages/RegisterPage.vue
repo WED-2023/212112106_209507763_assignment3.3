@@ -217,7 +217,7 @@ export default {
           password_confirmation: state.confirmedPassword,
         };
         console.log('Sending payload:', payload);
-        await axios.post(`${process.env.VUE_APP_SERVER_DOMAIN}/auth/register`, payload);
+        await axios.post(`${process.env.VUE_APP_SERVER_DOMAIN}/api/auth/register`, payload);
         if (window.toast) window.toast('Registration successful', 'You can now login', 'success');
         else console.log('Registration successful');
         router.push('/login');

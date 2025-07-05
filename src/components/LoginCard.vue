@@ -104,7 +104,7 @@ export default {
 
       try {
         await axios.post(
-          `${store.server_domain}/auth/login`,
+          `${store.server_domain}/api/auth/login`,
           {
             username: state.username,
             password: state.password,

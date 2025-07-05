@@ -246,7 +246,7 @@ export default {
       // 2. If not yet recorded view but user is logged in, send POST to record
       if (store.username && !viewed.value) {
         try {
-          await axios.post(`${server}/users/clickOnRecipe`, { recipeId }, {
+          await axios.post(`${server}/api/users/clickOnRecipe`, { recipeId }, {
           withCredentials: true
         });
           viewed.value = true;
@@ -272,7 +272,7 @@ export default {
       favoriteLoading.value = true;
       try {
         // Use your POST /favoriteRecipes/:recipeId endpoint
-        await axios.post(`${server}/users/favoriteRecipes/${recipeId}`, {}, {
+        await axios.post(`${server}/api/users/favoriteRecipes/${recipeId}`, {}, {
           withCredentials: true
         });
         
