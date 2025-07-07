@@ -82,25 +82,52 @@
 
             <!-- Ingredients -->
             <div class="mb-3">
-              <label class="form-label">Ingredients (comma separated)</label>
-              <input
-                  v-model="state.ingredientInput"
-                  type="text"
-                  class="form-control"
-                  @keyup.enter.prevent="addIngredient"
-                  @blur="v$.extendedIngredients.$touch()"
-                  @input="v$.extendedIngredients.$touch()"
-              />
-              <div class="mt-2">
-                <span
-                    class="badge bg-secondary me-1"
-                    v-for="(ing, index) in state.extendedIngredients"
-                    :key="index"
-                >
-                  {{ ing }}
-                  <button type="button" class="btn-close btn-close-white ms-1" aria-label="Remove" @click="removeIngredient(index)"></button>
-                </span>
+              <label class="form-label">Add Ingredient</label>
+              <div class="row g-2">
+                <div class="col-md-5">
+                  <input
+                      v-model="state.ingredientInput.name"
+                      type="text"
+                      class="form-control"
+                      placeholder="Ingredient name"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <input
+                      v-model.number="state.ingredientInput.amount"
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      class="form-control"
+                      placeholder="Amount"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <input
+                      v-model="state.ingredientInput.unit"
+                      type="text"
+                      class="form-control"
+                      placeholder="Unit (e.g. grams, tbsp)"
+                  />
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-primary w-100" @click="addIngredient">+</button>
+                </div>
               </div>
+
+              <!-- Ingredient list -->
+              <div class="mt-3">
+    <span
+        class="badge bg-secondary me-1 mb-1"
+        v-for="(ing, index) in state.extendedIngredients"
+        :key="index"
+    >
+      {{ ing.name }} - {{ ing.amount }} {{ ing.unit }}
+      <button type="button" class="btn-close btn-close-white ms-1" aria-label="Remove" @click="removeIngredient(index)"></button>
+    </span>
+              </div>
+
+              <!-- Validation -->
               <div class="invalid-feedback d-block" v-if="v$.extendedIngredients.$dirty && v$.extendedIngredients.$invalid">
                 <div v-for="err in v$.extendedIngredients.$errors" :key="err.$uid">{{ err.$message }}</div>
               </div>
@@ -159,7 +186,11 @@ export default {
       amount_of_meals: null,
       instructions: '',
       extendedIngredients: [],
-      ingredientInput: '',
+      ingredientInput: {
+        name: '',
+        amount: null,
+        unit: ''
+      }
     });
 
 
@@ -181,7 +212,7 @@ export default {
       },
       extendedIngredients: {
         required: helpers.withMessage(
-            'At least one ingredient is required',
+            'At least one complete ingredient is required',
             () => state.extendedIngredients.length > 0
         )
       }
@@ -189,10 +220,15 @@ export default {
     const v$ = useVuelidate(rules, state);
 
     const addIngredient = () => {
-      const input = state.ingredientInput.trim();
-      if (input) {
-        state.extendedIngredients.push(input);
-        state.ingredientInput = '';
+      const { name, amount, unit } = state.ingredientInput;
+
+      if (name.trim() && amount > 0 && unit.trim()) {
+        state.extendedIngredients.push({ name: name.trim(), amount, unit: unit.trim() });
+
+        // Clear input fields
+        state.ingredientInput.name = '';
+        state.ingredientInput.amount = null;
+        state.ingredientInput.unit = '';
       }
     };
 
@@ -202,7 +238,9 @@ export default {
 
     const submitRecipe = async () => {
       // 🔧 Fix: Push last ingredient if not yet added
-      if (state.ingredientInput.trim()) {
+      if (state.ingredientInput.name.trim() &&
+          state.ingredientInput.amount > 0 &&
+          state.ingredientInput.unit.trim()) {
         addIngredient();
       }
 
@@ -222,9 +260,10 @@ export default {
           gluten_free: Boolean(state.gluten_free),
           amount_of_meals: Number(state.amount_of_meals),
           instructions: state.instructions,
-          extendedIngredients: Array.isArray(state.extendedIngredients)
-            ? state.extendedIngredients
-            : [],
+          extendedIngredients: state.extendedIngredients.map(({ name, amount, unit }) => ({
+            name,
+            amount: `${amount} ${unit}`.trim()
+          }))
         };
 
         console.log("Payload being sent:", payload);
@@ -246,7 +285,11 @@ export default {
           amount_of_meals: null,
           instructions: '',
           extendedIngredients: [],
-          ingredientInput: '',
+          ingredientInput: {
+            name: '',
+            amount: null,
+            unit: ''
+          }
         });
         v$.value.$reset();
 

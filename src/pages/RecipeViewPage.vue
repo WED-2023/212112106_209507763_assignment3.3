@@ -217,6 +217,8 @@ export default {
 
     onMounted(async () => {
       const recipeId = route.params.recipeId;
+      // print ingredients
+
       if (!recipeId) {
         router.replace("/NotFound");
         return;
@@ -233,7 +235,7 @@ export default {
           return;
         }
         recipe.value = data;
-
+        console.log(recipe.value.ingredients);
         // Initialize viewed/favorite from response flags
         viewed.value = Boolean(data.clicked_by_user);
         favorite.value = Boolean(data.saved_by_user);
