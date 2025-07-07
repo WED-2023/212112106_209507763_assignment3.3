@@ -252,7 +252,7 @@ export default {
     onMounted(() => {
       console.log('MainPage Component Mounted');
       if (store.username) {
-        console.log('Username found, fetching last viewed recipes...');
+        console.log(`Username found ${store.username}, fetching last viewed recipes...`);
         fetchLastViewedRecipes();
       } else {
         console.log('No username found during onMounted.');

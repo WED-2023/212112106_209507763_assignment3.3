@@ -100,7 +100,14 @@
 
     <!-- CreateRecipeModal component -->
     <CreateRecipeModal @recipe-created-success="onRecipeCreated" ref="createModal" />
-    <router-view />
+    <!-- Session loading spinner (below nav) -->
+    <div v-if="loadingSession" class="text-center my-5">
+      <b-spinner class="me-2" />
+      <span>Loading session...</span>
+    </div>
+
+    <!--  Actual route content (after session is ready) -->
+    <router-view v-else />
   </div>
 </template>
 
@@ -109,9 +116,10 @@ import * as bootstrap from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-import { getCurrentInstance } from 'vue';
+import { ref, getCurrentInstance, onMounted  } from 'vue';
 import CreateRecipeModal from './components/CreateRecipeModal.vue';
 import axios from 'axios';
+import { checkSession } from '@/utils/session';
 
 export default {
   name: "App",
@@ -135,6 +143,13 @@ export default {
     const store = internalInstance.appContext.config.globalProperties.store;
     const toast = internalInstance.appContext.config.globalProperties.toast;
     const router = internalInstance.appContext.config.globalProperties.$router;
+    const loadingSession = ref(true);
+
+
+    onMounted(async () => {
+      await checkSession(store, toast, false);
+      loadingSession.value = false;
+    });
 
     const logout = async () => {
       try {
@@ -148,7 +163,7 @@ export default {
       }
     };
 
-    return { store, logout };
+    return { store, logout, loadingSession };
   }
 }
 </script>
