@@ -30,15 +30,23 @@
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'about' }">About</router-link>
             </li>
+              <!-- <li class="nav-item">
+                <span class="navbar-text text-white me-3">{{ store.username }}</span>
+              </li> -->
+                <li class="nav-item d-flex align-items-center">
+            <span class="navbar-text text-white me-3">
+                  {{ store.username ? store.username : 'Hello Guest' }}
+                </span>
+              </li>
           </ul>
 
           <!-- Right side user controls -->
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <!-- Guest view -->
             <template v-if="!store.username">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <span class="navbar-text text-white me-2">Hello guest</span>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <router-link class="nav-link" :to="{ name: 'login' }">Login</router-link>
               </li>
@@ -49,9 +57,7 @@
 
             <!-- Logged-in view -->
             <template v-else>
-              <li class="nav-item">
-                <span class="navbar-text text-white me-3">{{ store.username }}</span>
-              </li>
+            
               <li class="nav-item">
                 <a class="nav-link" href="#" @click.prevent="openCreateRecipeModal">Create Recipe</a>
               </li>
@@ -191,4 +197,128 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
+
+//by ABed
+.navbar-text {
+  font-weight: 500;
+  font-size: 1.08rem;
+  letter-spacing: 0.5px;
+}
+
+/* Stylish Navbar */
+.navbar.bg-primary {
+  background: linear-gradient(90deg, #1565c0 0%, #1976d2 60%, #2196f3 100%) !important;
+  border-radius: 2px;
+  box-shadow: 0 4px 18px rgba(21, 101, 192, 0.12), 0 1.5px 0 rgba(255,255,255,0.08) inset;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0.5rem 2rem;
+  position: relative;
+}
+
+/* Brand */
+.navbar-brand {
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fff !important;
+  text-shadow: 0 2px 6px rgba(33,150,243,0.18);
+  transition: color 0.18s;
+}
+
+/* Nav links */
+.navbar-nav .nav-link {
+  color: #fff !important;
+  font-size: 1.08rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border-radius: 8px;
+  margin-right: 6px;
+  padding: 0.5rem 1rem;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+  background: rgba(255,255,255,0.12);
+  color: #ffd600 !important;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.13);
+  text-decoration: none;
+}
+
+.navbar-nav .nav-link.router-link-exact-active {
+  background: rgba(255,255,255,0.18);
+  color: #ffd600 !important;
+  font-weight: 700;
+}
+
+/* Navbar text (Hello user) */
+.navbar-text {
+  color: #fff !important;
+  font-size: 1.09rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 5px;
+  text-shadow: 0 1px 4px rgba(33,150,243,0.16);
+}
+
+/* Dropdown menu */
+.navbar-nav .dropdown-menu {
+  background: #1976d2;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(33,150,243,0.13);
+  min-width: 200px;
+  border: none;
+  padding: 0.5rem 0;
+}
+
+.navbar-nav .dropdown-item {
+  color: #fff;
+  font-weight: 500;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  transition: background 0.14s, color 0.14s;
+}
+
+.navbar-nav .dropdown-item:hover,
+.navbar-nav .dropdown-item:focus {
+  background: #1565c0;
+  color: #ffd600;
+}
+
+/* Logout button styling */
+.btn-link.nav-link {
+  color: #fff !important;
+  font-weight: 600;
+  text-decoration: underline;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background 0.14s, color 0.14s;
+}
+
+.btn-link.nav-link:hover,
+.btn-link.nav-link:focus {
+  background: rgba(255,255,255,0.12);
+  color: #ffd600 !important;
+}
+
+/* Responsive tweaks */
+@media (max-width: 991px) {
+  .navbar.bg-primary {
+    padding: 0.5rem 1rem;
+    border-radius: 0 0 18px 18px;
+  }
+  .navbar-brand {
+    font-size: 1.3rem;
+  }
+  .navbar-text {
+    font-size: 1rem;
+  }
+}
+
+// by ABed
 </style>
