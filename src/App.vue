@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="nav">
       <div class="container-fluid">
         <!-- Brand -->
         <router-link class="navbar-brand" :to="{ name: 'main' }">Vue Recipes</router-link>
@@ -33,8 +33,8 @@
               <!-- <li class="nav-item">
                 <span class="navbar-text text-white me-3">{{ store.username }}</span>
               </li> -->
-                <li class="nav-item d-flex align-items-center">
-            <span class="navbar-text text-white me-3">
+                <li class="nav-item d-flex ">
+            <span class="navbar-text text-white me-2">
                   {{ store.username ? store.username : 'Hello Guest' }}
                 </span>
               </li>
