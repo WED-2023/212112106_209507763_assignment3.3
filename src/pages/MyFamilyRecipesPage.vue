@@ -1,7 +1,7 @@
 <template>
   <GenericRecipePreviewPage
       title="My Family Recipes"
-      fetch-path="/users/familyRecipes"
+      fetch-path="/recipes/familyRecipes"
       log-purpose="Family recipes Page"
   />
 </template>

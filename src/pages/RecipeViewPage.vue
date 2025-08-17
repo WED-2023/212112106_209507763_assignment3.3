@@ -168,6 +168,16 @@
         <span v-if="recipe.gluten_free" class="badge bg-warning text-dark me-1">Gluten Free</span>
       </div>
 
+      <!-- Family Recipe Info (only for recipeId < 0) -->
+      <div v-if="$route.params.recipeId < 0" class="mb-4">
+        <div class="mb-2">
+          <strong>Recipe Written by:</strong> {{ recipe.recipe_author }}
+        </div>
+        <div class="mb-2">
+          <strong>When we make this:</strong> {{ recipe.recipe_season }}
+        </div>
+      </div>
+
       <!-- Ingredients -->
       <div class="mb-4">
         <h4>Ingredients</h4>
