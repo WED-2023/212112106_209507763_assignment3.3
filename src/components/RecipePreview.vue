@@ -178,7 +178,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<!-- <style scoped>
 .recipe-image-container {
   cursor: pointer;
 }
@@ -218,5 +218,111 @@ export default {
 .favorite-btn:disabled {
   cursor: default;
   opacity: 0.7;
+}
+</style> -->
+<style scoped>
+.recipe-card {
+  background: #fdfdfd;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.recipe-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.recipe-image-container {
+  position: relative;
+  cursor: pointer;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  overflow: hidden;
+}
+
+.recipe-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.recipe-image-container:hover .recipe-image {
+  transform: scale(1.03);
+}
+
+.recipe-image-container .overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.recipe-image-container:hover .overlay {
+  opacity: 1;
+}
+
+.overlay-text {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.25rem;
+  background-color: #ffffff;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.35em 0.6em;
+  border-radius: 8px;
+}
+
+.favorite-btn {
+  font-size: 1.3rem;
+  color: #e74c3c;
+  background: none;
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+.favorite-btn:hover:not(:disabled) {
+  transform: scale(1.15);
+}
+
+.favorite-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.text-muted.small {
+  font-size: 0.8rem;
+  color: #888 !important;
 }
 </style>

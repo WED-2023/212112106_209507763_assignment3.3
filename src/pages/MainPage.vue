@@ -7,8 +7,8 @@
       <BRow class="justify-content-center">
         <BCol cols="12" xl="11">
           <div class="welcome-section text-center mb-4">
-            <h2 class="text-white fw-bold mb-2">Welcome to Recipe World</h2>
-            <p class="lead text-white-50">Discover amazing recipes and share your culinary adventures</p>
+            <h1 >Welcome to Goldfarb-Showgan Recipes</h1>
+            <h3 >Discover amazing recipes and share your culinary adventures with the world!</h3>
           </div>
 
           <BRow class="g-3">
@@ -24,6 +24,7 @@
             <div class="text-center mt-3">
                 <BButton 
                   variant="outline-primary" 
+                   size="xl"
                   @click="refreshRandomRecipes"
                   :disabled="loadingRandom"
                 >
@@ -46,8 +47,8 @@
                 <LoginCard class="mb-3" @login-success="fetchLastViewedRecipes" />
                 <BCard class="shadow border-0">
                   <BCardBody class="text-center">
-                    <h5 class="card-title mb-3">New to Recipe World?</h5>
-                    <p class="text-muted mb-3">Join our community and start your culinary journey!</p>
+                    <h5 class="card-title mb-3 welcome-title">New to Recipe World?</h5>
+                    <p class="text-muted mb-3 welcome-subtext">Join our community and start your culinary journey!</p>
                     <BButton
                       variant="success"
                       size="lg"
@@ -177,16 +178,31 @@ export default {
 <style scoped>
 .main-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #b4d2de 0%, #bfd9dd 100%);
+  /* background: linear-gradient(135deg, #b4d2de 0%, #bfd9dd 100%); */
+  background: linear-gradient(135deg, #def6ff 0%, #dcf7f4 100%);
+
 }
 
 .RandomRecipes {
   margin: 10px 0;
 }
 
-.welcome-section h2 {
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-  font-size: 2.2rem;
+.welcome-section h1 {
+
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-family: 'Segoe UI', 'Nunito', 'Avenir', Helvetica, Arial, sans-serif;
+  color:black
+}
+
+.welcome-section h3 {
+
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-family: 'Segoe UI', 'Nunito', 'Avenir', Helvetica, Arial, sans-serif;
+  color:black
 }
 
 .card {
@@ -198,9 +214,22 @@ export default {
   transform: translateY(-2px);
 }
 
+
+.welcome-title {
+  color: #28a745; /* Bootstrap success green */
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.welcome-subtext {
+  color: #28a745; /* Match green color */
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
 @media (max-width: 768px) {
-  .welcome-section h2 {
-    font-size: 1.8rem;
+  .welcome-section h1 {
+    font-size: 2.0rem;
   }
 }
 </style>

@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="nav">
       <div class="container-fluid">
         <!-- Brand -->
-        <router-link class="navbar-brand" :to="{ name: 'main' }">Vue Recipes</router-link>
+        <router-link class="navbar-brand" :to="{ name: 'main' }">Goldfarb-Showgan Recipes</router-link>
 
         <!-- Toggler for small screens -->
         <button
@@ -225,6 +225,14 @@ export default {
   color: #fff !important;
   text-shadow: 0 2px 6px rgba(33,150,243,0.18);
   transition: color 0.18s;
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus {
+  background: rgba(255,255,255,0.12);
+  color: #ffd600 !important;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.13);
+  text-decoration: none;
 }
 
 /* Nav links */

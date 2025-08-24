@@ -1,15 +1,16 @@
 <template>
   <BCard class="shadow border-0">
     <BCardHeader class="bg-primary text-white">
-      <h5 class="mb-0">
+      <h3 class="mb-0">
         <i class="fas fa-sign-in-alt me-2"></i>
         Welcome Back
-      </h5>
+      </h3>
+        <div class="underline-title"></div>
     </BCardHeader>
 
     <BCardBody>
       <BForm @submit.prevent="login">
-        <BFormGroup label="Username" label-for="username">
+        <BFormGroup label="Username" label-for="username" label-class="semibold-label">
           <BFormInput
             id="username"
             v-model.trim="state.username"
@@ -23,7 +24,7 @@
           </BFormInvalidFeedback>
         </BFormGroup>
 
-        <BFormGroup label="Password" label-for="password">
+        <BFormGroup label="Password" label-for="password" label-class="semibold-label">
           <BFormInput
             id="password"
             v-model.trim="state.password"
@@ -48,10 +49,10 @@
           </BLink> -->
         </div>
 
-        <BButton type="submit" variant="primary" size="lg" block :disabled="loading">
+        <BButton class="login-btn" type="submit" size="lg" block :disabled="loading">
           <BSpinner v-if="loading" small class="me-2" />
           <i v-else class="fas fa-sign-in-alt me-2"></i>
-          {{ loading ? 'Signing In...' : 'Sign In' }}
+          {{ loading ? 'Signing In...' : 'Login' }}
         </BButton>
       </BForm>
 
@@ -136,5 +137,86 @@ export default {
 .form-control:focus {
   border-color: #0d6efd;
   box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+
+/* Use a clean, modern font stack */
+* {
+  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+}
+.underline-title {
+  background: -webkit-linear-gradient(right, #ffffff, #ffffff);
+  height: 2px;
+  margin: -1.1rem auto 0 auto;
+  width: 89px;
+}
+
+
+.card-header h3 {
+  font-size: 2.0rem;
+  font-weight: 600;
+  font-family: "Raleway Thin", sans-serif;
+  letter-spacing: 2px;
+  padding-bottom: 23px;
+  padding-top: 13px;
+  text-align: center;
+}
+
+.semi-bold{
+  font-weight: 600;
+}
+
+.login-btn {
+  background: -webkit-linear-gradient(right, #2855f7, #2855f7);
+  border: none;
+  border-radius: 21px;
+  box-shadow: 0px 1px 8px #0d6efd;
+  cursor: pointer;
+  color: white;
+  font-family: "Raleway SemiBold", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  height: 50px;
+  margin: 0 auto;
+  margin-top: 20px;
+  transition: 0.25s;
+  width: 250px;
+  align-items: center;
+  text-align: center;
+}
+.login-btn:hover {
+  box-shadow: 0px 1px 18px #1b76f5;
+}
+
+
+
+.b-card-body {
+  font-size: 1rem;
+}
+
+label {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.form-control {
+  font-size: 1rem;
+  padding: 0.6rem 0.75rem;
+}
+
+.b-button {
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.b-alert {
+  font-size: 0.95rem;
+}
+
+.fas {
+  font-size: 1rem;
 }
 </style>

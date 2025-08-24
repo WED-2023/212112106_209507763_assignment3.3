@@ -316,4 +316,103 @@ export default {
   height: auto;
   object-fit: cover;
 }
+
+
+/* Base typography */
+.container {
+  font-family: "Georgia", "Times New Roman", serif;
+  color: #2b2b2b;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* Title */
+.recipe-header h1 {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 2.6rem;
+  color: #3a3a3a;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+
+/* Recipe meta info */
+.d-flex > div {
+  font-size: 1rem;
+  color: #555;
+}
+.d-flex strong {
+  font-weight: 600;
+  color: #222;
+}
+
+/* Ingredients & instructions headings */
+h4 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2b4f60;
+  border-bottom: 2px solid #d6d6d6;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Lists (ingredients, instructions) */
+ul, ol {
+  font-size: 1rem;
+  color: #444;
+  padding-left: 1.2rem;
+}
+li {
+  margin-bottom: 0.35rem;
+}
+
+/* Instructions block */
+pre {
+  font-family: "Merriweather", serif;
+  font-size: 1rem;
+  color: #333;
+  background: #f8f8f8;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+/* Badges look softer & elegant */
+.badge {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.4em 0.6em;
+  border-radius: 6px;
+}
+
+/* Favorite Button refinement */
+button.btn {
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+button.btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Elegant text styling for secondary info */
+.text-muted {
+  font-style: italic;
+  color: #888 !important;
+}
+.text-success {
+  font-weight: 600;
+}
+
+/* Center image nicely */
+.recipe-header img {
+  border-radius: 10px;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  object-fit: cover;
+}
 </style>

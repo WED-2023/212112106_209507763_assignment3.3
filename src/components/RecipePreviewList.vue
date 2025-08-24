@@ -116,4 +116,31 @@ export default {
 .container {
   min-height: 400px;
 }
+
+h3 {
+  font-size: 2rem;              // Slightly larger than default h3
+  font-weight: 600;             // Semi-bold for a clean look
+  color: #2c3e50;               // Deep gray-blue tone
+  margin-bottom: 1.5rem;        // Spacing from the row below
+  text-align: center;           // Center the title
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 60%;
+  height: 3px;
+  background-color: #007bff;    // Bootstrap primary color
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.recipePreview {
+  margin-bottom: 1.5rem;        // Space between rows of recipes
+}
 </style>
